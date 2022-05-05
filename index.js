@@ -36,6 +36,14 @@ async function run() {
             res.send(grocery);
         });
 
+        //add product
+        app.post('/product', async (req, res) => {
+
+            const newProduct = req.body;
+            const result = await groceryCollection.insertOne(newProduct);
+            res.send(result);
+        })
+
     }
     finally {
 
