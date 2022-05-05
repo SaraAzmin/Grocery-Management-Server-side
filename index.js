@@ -20,12 +20,22 @@ async function run() {
         await client.connect();
         const groceryCollection = client.db('groceryInventory').collection('groceries');
 
+        //load all grocery items
         app.get('/groceries', async (req, res) => {
             const query = {};
             const cursor = groceryCollection.find(query);
             const groceries = await cursor.toArray();
             res.send(groceries);
         });
+
+        //load item by id
+        app.get('/groceries/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const grocery = await groceryCollection.findOne(query);
+            res.send(grocery);
+        });
+
     }
     finally {
 
