@@ -52,13 +52,34 @@ async function run() {
             res.send(result);
         })
 
+        //update delivery
+        app.put('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+
+            const result = await groceryCollection.findOne({
+                _id: ObjectId(id)
+            });
+
+            const updatedProduct = req.body;
+
+            let quantity = updatedProduct.newQuantity;
+
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: quantity
+                }
+            };
+            const result2 = await groceryCollection.updateOne(filter, updatedDoc, options);
+            res.send(result2);
+
+        })
     }
     finally {
 
     }
 }
-
-
 
 run().catch(console.dir);
 
